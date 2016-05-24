@@ -1,0 +1,283 @@
+*
+	box-sizing: border-box
+
+html, body, h1, h2, p, h3
+	margin: 0
+	padding: 0
+
+#container
+	width: 1400px
+	height: 100%
+	background-color: #2196F3
+	position: absolute
+	z-index: -1
+	margin-left: auto
+	margin-right: auto
+	left: 0
+	right: 0
+	overflow: hidden
+
+	&:after
+		position: absolute
+		z-index: 1
+		content: ""
+		width: 12000px
+		left: 421.5px
+		margin-left: -6000px
+		height: 120%
+		top: 160px
+		background-color: white
+		transform: rotate(-9deg)
+
+header
+	width: 1400px
+	margin: 0 auto
+
+h1
+	color: white
+	font-family: 'Poiret One', cursive
+	font-weight: 100
+	letter-spacing: 1.2px
+	font-size: 4.5rem
+	padding-top: 20px
+
+p
+	font-family: 'Roboto', sans-serif
+	color: white
+
+a
+	text-decoration: none
+	font-family: 'Roboto', sans-serif
+	font-weight: 100
+	color: rgba(0, 0, 0, 0.5)
+
+#container-second
+	position: relative
+	width: 1400px
+
+#tabs
+	position: absolute
+	right: 0
+	padding-right: 5px
+
+	p
+		cursor: pointer
+		color: rgba(0, 0, 0, 0.5)
+		display: inline-block
+		letter-spacing: 1.2px
+		font-size: 1.5em
+		font-weight: 100
+		
+		&:hover
+			color: rgba(0, 0, 0, 0.4)
+
+		&:nth-child(1), &:nth-child(2)
+			margin-right: 25px
+
+#cards, #container-second
+	margin: 0 auto
+	padding-left: 20px
+	color: black
+	margin-bottom: 20px
+
+.cards
+	margin-top: 20px
+	height: 80px
+
+	img,h3
+		display: inline-block
+
+	img
+		vertical-align: middle
+		margin-bottom: 8px
+		margin-left: 5px
+
+	h3
+		font-family: 'Poiret One', cursive
+		font-weight: 800
+		padding-left: 10px
+		padding-top: 5px
+		letter-spacing: 1.2px
+		font-size: 28px
+		color: rgba(0, 0, 0, 0.5)
+
+		&:hover
+			color: #2196F3
+
+	p
+		color: rgba(0, 0, 0, 0.7)
+		font-family: 'Roboto', sans-serif
+		font-weight: 100
+		padding-left: 5px
+		border-top: 1px solid rgba(0, 0, 0, 0.1)
+		padding-top: 5px
+		font-size: 18px
+
+#cards-inside
+	margin-top: 135px
+	margin-bottom: 50px
+
+.online
+	background-color: #4CAF50
+
+	h3,p
+		color: #F5F5F5
+
+.offline
+
+	h3,p
+		color: black
+
+.closed
+	background-color: #000000
+
+	h3,p
+		color: white
+
+	p
+		padding-left: 10px
+
+@media(max-width: 1500px)
+	#container, header, #container-second
+		width: 95%
+
+	#container-second, #cards
+		padding-left: 0px
+
+	#cards-inside, header
+		padding-left: 20px
+
+	header
+		margin: 0px	
+
+@media(max-width: 1400px)
+
+	#container-second, #tabs
+		padding-right: 20px
+
+	#container, header, #container-second
+		width: 100%
+
+@media(max-width: 1150px)
+	header
+		h1
+			font-size: 60px
+
+	#cards-inside
+		margin-top: 100px
+
+	#container
+		&:after
+			top: 12%
+
+@media(max-width: 1050px)
+	#container
+		&:after
+			top: 102px
+
+@media(max-width: 900px)
+	header
+		h1
+			font-size: 48px
+
+	#container
+		&:after
+			top: 90px
+
+@media(max-width: 780px)
+	header
+		h1
+			font-size: 46px
+
+	#container
+		&:after
+			top: 75px
+
+	#tabs
+		p
+			font-size: 20px
+
+	#cards-inside
+		margin-top: 80px		
+
+@media(max-width: 680px)
+	header
+		h1
+			font-size: 42px
+
+	#container
+		&:after
+			top: 65px
+
+	#tabs
+		p
+			font-size: 16px
+
+	.cards
+		h3
+			font-size: 24px
+
+		p
+			font-size: 16px
+
+@media(max-width: 640px)
+	header
+		h1
+			font-size: 36px
+
+	#container
+		&:after
+			top: 50px
+
+	#cards-inside
+		margin-top: 60px
+
+@media(max-width: 550px)
+	header
+		padding-left: 10px
+		padding-right: 10px
+
+		h1
+			font-size: 30px
+
+	.cards
+		h3
+			font-size: 20px
+
+	#container
+		&:after
+			top: 35px
+
+	#tabs
+		padding-right: 10px
+
+	#cards-inside
+		padding-left: 10px
+
+	#container-second
+		padding-right: 10px
+
+	#cards-inside
+		margin-top: 45px
+
+input
+	width: 100%
+	padding: 15px
+	font-size: 20px
+
+	&:focus
+		outline: #2196F3
+
+.example-enter
+	opacity: 0.01
+
+.example-enter.example-enter-active
+	opacity: 1
+	transition: opacity 500ms ease-in
+
+.example-leave
+	opacity: 1
+
+.example-leave.example-leave-active
+	opacity: 0.01
+	transition: opacity 300ms ease-in
