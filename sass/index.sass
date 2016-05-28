@@ -1,7 +1,7 @@
 *
 	box-sizing: border-box
 
-html, body, h1, h2, p, h3
+html, body, h1, h2, p, h3, button
 	margin: 0
 	padding: 0
 
@@ -81,8 +81,8 @@ a
 	margin-bottom: 20px
 
 .cards
+	position: relative
 	margin-top: 20px
-	height: 80px
 
 	img,h3
 		display: inline-block
@@ -108,10 +108,18 @@ a
 		color: rgba(0, 0, 0, 0.7)
 		font-family: 'Roboto', sans-serif
 		font-weight: 100
-		padding-left: 5px
+		padding: 10px
 		border-top: 1px solid rgba(0, 0, 0, 0.1)
-		padding-top: 5px
 		font-size: 18px
+
+.cross
+	display: inline-block
+	border: 0px
+	background-color: transparent
+	position: absolute
+	right: 10
+	top: 20
+	cursor: pointer
 
 #cards-inside
 	margin-top: 135px
@@ -122,6 +130,9 @@ a
 
 	h3,p
 		color: #F5F5F5
+
+	.cross
+		color: white	
 
 .offline
 
@@ -136,6 +147,27 @@ a
 
 	p
 		padding-left: 10px
+input
+	width: 100%
+	padding: 15px
+	font-size: 20px
+
+	&:focus
+		outline: #2196F3
+
+.example-enter
+	opacity: 0.01
+
+.example-enter.example-enter-active
+	opacity: 1
+	transition: opacity 500ms ease-in
+
+.example-leave
+	opacity: 1
+
+.example-leave.example-leave-active
+	opacity: 0.01
+	transition: opacity 300ms ease-in
 
 @media(max-width: 1500px)
 	#container, header, #container-second
@@ -198,86 +230,26 @@ a
 			font-size: 20px
 
 	#cards-inside
-		margin-top: 80px		
+		margin-top: 80px
+
+	input
+		font-size: 18px
+		padding: 10px
 
 @media(max-width: 680px)
+	#container
+		display: none
+
 	header
 		h1
-			font-size: 42px
-
-	#container
-		&:after
-			top: 65px
+			color: black
+			text-align: center
 
 	#tabs
-		p
-			font-size: 16px
-
-	.cards
-		h3
-			font-size: 24px
-
-		p
-			font-size: 16px
-
-@media(max-width: 640px)
-	header
-		h1
-			font-size: 36px
-
-	#container
-		&:after
-			top: 50px
+		position: initial
+		text-align: center
+		padding-right: 0px
+		margin-top: 25px
 
 	#cards-inside
-		margin-top: 60px
-
-@media(max-width: 550px)
-	header
-		padding-left: 10px
-		padding-right: 10px
-
-		h1
-			font-size: 30px
-
-	.cards
-		h3
-			font-size: 20px
-
-	#container
-		&:after
-			top: 35px
-
-	#tabs
-		padding-right: 10px
-
-	#cards-inside
-		padding-left: 10px
-
-	#container-second
-		padding-right: 10px
-
-	#cards-inside
-		margin-top: 45px
-
-input
-	width: 100%
-	padding: 15px
-	font-size: 20px
-
-	&:focus
-		outline: #2196F3
-
-.example-enter
-	opacity: 0.01
-
-.example-enter.example-enter-active
-	opacity: 1
-	transition: opacity 500ms ease-in
-
-.example-leave
-	opacity: 1
-
-.example-leave.example-leave-active
-	opacity: 0.01
-	transition: opacity 300ms ease-in
+		margin-top: 25px	
