@@ -1,5 +1,13 @@
 let ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
+function addInLocalStorage(item) {
+	let current = localStorage.channel;
+	if(current === undefined) {
+		localStorage.setItem('channel', item);
+	} else {
+		localStorage.setItem('channel', `${current},${item}`);
+	}
+}
 
 var App = React.createClass({
 	getInitialState() {
@@ -68,12 +76,25 @@ const Cards = React.createClass({
 	getInitialState() {
 		return {
 			renderAll: [],
-			renderOnline: [],
-			renderOffline: [],
-			renderClosed: [],
 			check: this.props.status,
-			channels:  ["freecodecamp", "storbeck", "habathcx","meteos","RobotCaleb","noobs2ninjas","brunofin","comster404","cretetion","sheevergaming","TR7K","OgamingSC2","ESL_SC2"]
-		};
+			channels: null
+		}	
+	},
+	setData() {
+		let channels = ["freecodecamp", "storbeck", "habathcx","meteos","RobotCaleb","noobs2ninjas","brunofin","comster404","cretetion","sheevergaming","TR7K","OgamingSC2","ESL_SC2"];
+		if(localStorage.channel) {
+			channels = [];
+			let split = localStorage.channel.split(',');
+			split.map((item) => {
+				channels.push(item);
+			});
+		}
+		this.setState({
+			channels: channels
+		}, function() {
+			localStorage.removeItem('channel');
+			this.getData();
+		});
 	},
 	getData(last) {
 		if(last === undefined) {
@@ -84,13 +105,15 @@ const Cards = React.createClass({
 						if(data.hasOwnProperty(status) === false) {
 							if(data.stream === null) {
 								this.setState({
-									renderAll: this.state.renderAll.concat([{channel: channel, url: `https://www.twitch.tv/${channel}`, status: 'offline', logo: logo.logo}]),
-									renderOffline: this.state.renderOffline.concat([{channel: channel, url: `https://www.twitch.tv/${channel}`, status: 'offline', logo: logo.logo}])
+									renderAll: this.state.renderAll.concat([{channel: channel, url: `https://www.twitch.tv/${channel}`, status: 'offline', logo: logo.logo}])
+								}, function() {
+									addInLocalStorage(channel);
 								});
 							} else {
 								this.setState({
-									renderAll: this.state.renderAll.concat([{channel: data.stream.channel.name, url: `https://www.twitch.tv/${channel}`, current: data.stream.channel.game + ' - ' + data.stream.channel.status, status: 'online', logo: logo.logo}]),
-									renderOnline: this.state.renderOnline.concat([{channel: data.stream.channel.name, url: `https://www.twitch.tv/${channel}`, current: data.stream.channel.game + ' - ' + data.stream.channel.status, status: 'online', logo: logo.logo}])
+									renderAll: this.state.renderAll.concat([{channel: data.stream.channel.name, url: `https://www.twitch.tv/${channel}`, current: data.stream.channel.game + ' - ' + data.stream.channel.status, status: 'online', logo: logo.logo}])
+								}, function() {
+									addInLocalStorage(channel);
 								});
 							}
 						}
@@ -98,7 +121,9 @@ const Cards = React.createClass({
 				})	
 				.fail((jqxhr) => {
 					this.setState({
-						renderClosed: this.state.renderClosed.concat([{channel: channel, status: 'closed'}])
+						renderAll: this.state.renderAll.concat([{channel: channel, status: 'closed'}])
+					}, function() {
+						addInLocalStorage(channel);
 					});
 				});
 			}
@@ -109,13 +134,15 @@ const Cards = React.createClass({
 					if(data.hasOwnProperty(status) === false) {
 						if(data.stream === null) {
 							this.setState({
-								renderAll: this.state.renderAll.concat([{channel: channel, url: `https://www.twitch.tv/${channel}`, status: 'offline', logo: logo.logo}]),
-								renderOffline: this.state.renderOffline.concat([{channel: channel, url: `https://www.twitch.tv/${channel}`, status: 'offline', logo: logo.logo}])
+								renderAll: this.state.renderAll.concat([{channel: channel, url: `https://www.twitch.tv/${channel}`, status: 'offline', logo: logo.logo}])
+							}, function() {
+								addInLocalStorage(channel);
 							});
 						} else {
 							this.setState({
-								renderAll: this.state.renderAll.concat([{channel: data.stream.channel.name, url: `https://www.twitch.tv/${channel}`, current: data.stream.channel.game + ' - ' + data.stream.channel.status, status: 'online', logo: logo.logo}]),
-								renderOnline: this.state.renderOnline.concat([{channel: data.stream.channel.name, url: `https://www.twitch.tv/${channel}`, current: data.stream.channel.game + ' - ' + data.stream.channel.status, status: 'online', logo: logo.logo}])
+								renderAll: this.state.renderAll.concat([{channel: data.stream.channel.name, url: `https://www.twitch.tv/${channel}`, current: data.stream.channel.game + ' - ' + data.stream.channel.status, status: 'online', logo: logo.logo}])
+							}, function() {
+								addInLocalStorage(channel);
 							});
 						}
 					}
@@ -123,32 +150,45 @@ const Cards = React.createClass({
 			})	
 			.fail((jqxhr) => {
 				this.setState({
-					renderClosed: this.state.renderClosed.concat([{channel: channel, status: 'closed'}])
+					renderAll: this.state.renderAll.concat([{channel: channel, status: 'closed'}])
+				}, function() {
+					addInLocalStorage(channel);
 				});
 			});
 		}
-
 	},
 	componentWillMount() {
-		this.getData();
+		this.setData();
 	},
 	componentWillReceiveProps(prop) {
 		this.setState({
 			check: prop
 		});
 	},
+	delete(index) {
+		let newArrSecond = this.state.renderAll.slice();
+		let split = localStorage.channel.split(',');
+		split.splice(index, 1);
+		split === '' ? localStorage.removeItem('channel') : localStorage.setItem('channel', split)
+		newArrSecond.splice(index, 1);
+		this.setState({
+			renderAll: newArrSecond
+		});
+	},
 	renderCards(i) {
 		if(i === 0 || i.status === 0) {
-			let cards = this.state.renderOnline.map((item, i) => {
-				return <div className="online cards" key={i}><img src={item.logo} width="30px" height="30px" /><a target="_blank" href={item.url}><h3>{item.channel}</h3></a><p>{item.current}</p></div>
+			let cards = this.state.renderAll.map((item, i) => {
+				if(item.status === 'online') {
+					return <div className="online cards" key={i}><img src={item.logo} width="30px" height="30px" /><a target="_blank" href={item.url}><h3>{item.channel}</h3></a><button className="cross" onClick={()=> {this.delete(i)}}>✕</button><p>{item.current}</p></div>
+				}
 			});
 			return (
 				cards
 			)
 		} else if(i === 1 || i.status === 1) {
-			let cards = this.state.renderOffline.map((item, i) => {
+			let cards = this.state.renderAll.map((item, i) => {
 				if(item.status === 'offline') {
-					return <div className="offline cards" key={i}><img src={item.logo} width="30px" height="30px"/><a target="_blank" href={item.url}><h3>{item.channel}</h3></a><p>Channel is offline</p></div>
+					return <div className="offline cards" key={i}><img src={item.logo} width="30px" height="30px"/><a target="_blank" href={item.url}><h3>{item.channel}</h3></a><button className="cross" onClick={() => {this.delete(i)}}>✕</button><p>Channel is offline</p></div>
 				}
 			});
 			return (
@@ -157,23 +197,24 @@ const Cards = React.createClass({
 		} else if(i === 2 || i.status === 2) {
 			let cards = this.state.renderAll.map((item, i) => {
 				if(item.status === 'offline') {
-					return <div className="offline cards" key={i}><img src={item.logo} width="30px" height="30px" /><a target="_blank" href={item.url}><h3>{item.channel}</h3></a><p>Channel is offline</p></div>
+					return <div className="offline cards" key={i}><img src={item.logo} width="30px" height="30px" /><a target="_blank" href={item.url}><h3>{item.channel}</h3></a><button className="cross" onClick={() => {this.delete(i)}}>✕</button><p>Channel is offline</p></div>
+				} else if(item.status === 'online') {
+					return <div className="online cards" key={i}><img src={item.logo} width="30px" height="30px" /><a target="_blank" href={item.url}><h3>{item.channel}</h3></a><button className="cross" onClick={() => {this.delete(i)}}>✕</button><p>{item.current}</p></div>
 				} else {
-					return <div className="online cards" key={i}><img src={item.logo} width="30px" height="30px" /><a target="_blank" href={item.url}><h3>{item.channel}</h3></a><p>{item.current}</p></div>
+					return <div className="closed cards" key={i}><h3>{item.channel}</h3><p>Account Closed</p><button className="cross" onClick={() => {this.delete(i)}}>✕</button></div>
 				}
 			});
-			let closed = this.state.renderClosed.map((item, i) => {
-				return <div className="closed cards" key={i}><h3>{item.channel}</h3><p>Account Closed</p></div>
-			});
-			cards.push(closed);
 			return (
 				cards
 			)
 		}
 	},
-	newChannel(i) {
-		if(i.keyCode === 13) {
-			this.setState({channels: this.state.channels.concat([i.target.value])}, function() {
+	newChannel(info) {
+		if(info.keyCode === 13) {
+			let data = info.target.value;
+			this.setState({
+				channels: this.state.channels.concat([data])
+			}, function() {
 				this.getData(1);
 			});
 		}
@@ -185,7 +226,7 @@ const Cards = React.createClass({
 		return (
 			<div id="cards-inside">
 				<input type='text' placeholder="+ Channel" onKeyDown={this.newChannel} onBlur={this.leave}/>
-				<ReactCSSTransitionGroup transitionName="example" transitionEnterTimeout={500} transitionLeaveTimeout={300}>
+				<ReactCSSTransitionGroup transitionName="example" transitionEnterTimeout={500} transitionLeaveTimeout={400}>
           			{this.renderCards(this.state.check)}
        			</ReactCSSTransitionGroup>
 			</div>	
